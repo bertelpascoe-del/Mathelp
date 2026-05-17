@@ -86,7 +86,7 @@ def generate_question(level, topic_choice):
         return generators[topic_choice](level)
 
     return random.choice(list(generators.values()))(level)
-``
+
 # ----------------------------
 # SESSION STATE
 # ----------------------------
