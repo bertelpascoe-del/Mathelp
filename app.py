@@ -7,6 +7,11 @@ from sympy import symbols, simplify
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application
 x = symbols('x')
 transformations = standard_transformations + (implicit_multiplication_application,)
+# Hjælpefunktion til parsing (fixer 2x, 3x^2 osv.)
+def parse_math(expr):
+    expr = expr.replace("^", "**")
+    return parse_expr(expr, transformations=transformations)
+
 
 
 
@@ -119,21 +124,34 @@ user_answer = st.text_input("Dit svar:")
 # ----------------------------
 
 
+
 if st.button("Tjek svar"):
     st.session_state.total += 1
 
-    try:
-        user_expr = parse_math(user_answer)
-        correct_expr = parse_math(str(correct_answer))
+    if not user_answer.strip():
+        st.session_state.feedback = "⚠️ Skriv et svar først"
+    else:
+        try:
+            user_expr = parse_math(user_answer)
+            correct_expr = parse_math(str(correct_answer))
 
-        if simplify(user_expr - correct_expr) == 0:
-            st.session_state.score += 1
-            st.session_state.feedback = "✅ Korrekt!"
-        else:
-            st.session_state.feedback = f"❌ Forkert. Rigtigt svar: {correct_answer}"
-            st.info(f"Forklaring: {explanation}")
-    except Exception as e:
-        st.session_state.feedback = "⚠️ Kunne ikke tolke dit svar (prøv fx 2*x eller 2x)"
+            st.write("DEBUG user:", user_expr)
+            st.write("DEBUG correct:", correct_expr)
+
+
+            if simplify(user_expr - correct_expr) == 0:
+                st.session_state.score += 1
+                st.session_state.feedback = "✅ Korrekt!"
+            else:
+                st.session_state.feedback = f"❌ Forkert. Rigtigt svar: {correct_answer}"
+                st.info(f"Forklaring: {explanation}")
+
+
+        except Exception:
+            st.session_state.feedback = "⚠️ Kunne ikke tolke dit svar (prøv fx 2*x eller 2x)"
+
+
+
 
 
 # ----------------------------
