@@ -119,7 +119,7 @@ user_answer = st.text_input("Dit svar:")
 # ----------------------------
 
 
-f st.button("Tjek svar"):
+if st.button("Tjek svar"):
     st.session_state.total += 1
 
     try:
