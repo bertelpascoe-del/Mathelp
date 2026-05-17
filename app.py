@@ -20,35 +20,60 @@ def parse_math(expr):
 # HJÆLPEFUNKTIONER
 # ----------------------------
 
-def generate_derivative():
-    a = random.randint(1, 5)
-    n = random.randint(1, 4)
+def generate_derivative(level):
+    if level == "Let":
+        a = random.randint(1, 3)
+        n = 1
+    elif level == "Medium":
+        a = random.randint(1, 5)
+        n = random.randint(2, 3)
+    else:  # Svær
+        a = random.randint(2, 6)
+        n = random.randint(3, 5)
+
     question = f"Hvad er den afledte af {a}x^{n}?"
     answer = f"{a*n}x^{n-1}"
-    hint = "Brug potensreglen: d/dx(x^n) = n·x^(n-1)"
-    explanation = f"d/dx({a}x^{n}) = {a}·{n}x^{n-1} = {a*n}x^{n-1}"
+    hint = "Brug potensreglen"
+    explanation = f"{a}·{n}x^{n-1} = {a*n}x^{n-1}"
+
     return "Differential", question, answer, hint, explanation
 
 
-def generate_integral():
-    a = random.randint(1, 5)
-    n = random.randint(1, 4)
+def generate_integral(level):
+    if level == "Let":
+        a = random.randint(1, 3)
+        n = 1
+    elif level == "Medium":
+        a = random.randint(1, 5)
+        n = random.randint(1, 3)
+    else:
+        a = random.randint(2, 6)
+        n = random.randint(2, 4)
+
     new_power = n + 1
     question = f"Hvad er ∫ {a}x^{n} dx?"
     answer = f"{a/new_power}x^{new_power} + C"
-    hint = "Brug: ∫ x^n dx = x^(n+1)/(n+1) + C"
-    explanation = f"∫ {a}x^{n} dx = {a}/({new_power})·x^{new_power} + C"
+
+    hint = "Hæv eksponenten med 1 og divider"
+    explanation = f"{a}/{new_power}·x^{new_power} + C"
+
     return "Integration", question, answer, hint, explanation
 
+def generate_limit(level):
+    if level == "Let":
+        x = random.randint(1, 3)
+    elif level == "Medium":
+        x = random.randint(2, 5)
+    else:
+        x = random.randint(3, 7)
 
-def generate_limit():
-    x = random.randint(1, 5)
     question = f"lim x→{x} af (x^2 - {x**2})/(x - {x})"
     answer = f"{2*x}"
-    hint = "Faktoriser: (x^2 - a^2) = (x-a)(x+a)"
-    explanation = f"Brug (x-a)(x+a)/(x-a) → x+a → {2*x}"
-    return "Grænseværdi", question, answer, hint, explanation
 
+    hint = "Faktoriser tælleren"
+    explanation = f"(x-a)(x+a)/(x-a) = x+a = {2*x}"
+
+    return "Grænseværdi", question, answer, hint, explanation
 
 def generate_question(level, topic_choice):
     generators = {
