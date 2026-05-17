@@ -159,11 +159,9 @@ if st.button("Tjek svar"):
 # ----------------------------
 
 if st.button("Næste opgave"):
-    if st.session_state.exam_mode and st.session_state.total >= num_questions:
-        st.success("✅ Eksamen færdig!")
-    else:
-        st.session_state.question = generate_question(level, topic_choice)
-        st.session_state.feedback = ""
+    st.session_state.question = generate_question(level, topic_choice)
+    st.session_state.feedback = ""
+    st.rerun()
 # ----------------------------
 # SCORE & STATISTIK
 # ----------------------------
