@@ -3,28 +3,10 @@
 import streamlit as st
 import random
 import time
-
-# Tilføj dette øverst i din fil:
 from sympy import symbols, sympify, simplify
-
 x = symbols('x')
 
-# Erstat din nuværende svar-check del med dette:
-if st.button("Tjek svar"):
-    st.session_state.total += 1
 
-    try:
-        user_expr = sympify(user_answer.replace("^", "**"))
-        correct_expr = sympify(str(correct_answer).replace("^", "**"))
-
-        if simplify(user_expr - correct_expr) == 0:
-            st.session_state.score += 1
-            st.session_state.feedback = "✅ Korrekt!"
-        else:
-            st.session_state.feedback = f"❌ Forkert. Rigtigt svar: {correct_answer}"
-            st.info(f"Forklaring: {explanation}")
-    except:
-        st.session_state.feedback = "⚠️ Kunne ikke tolke dit svar (prøv fx 2*x eller 2x)"
 
 # ----------------------------
 # HJÆLPEFUNKTIONER
@@ -136,15 +118,18 @@ user_answer = st.text_input("Dit svar:")
 if st.button("Tjek svar"):
     st.session_state.total += 1
 
-    if user_answer.strip().lower() == str(correct_answer).lower():
-        st.session_state.score += 1
-        st.session_state.feedback = "✅ Korrekt!"
-    else:
-        st.session_state.feedback = f"❌ Forkert. Rigtigt svar: {correct_answer}"
-        st.info(f"Forklaring: {explanation}")
-# Feedback
-if st.session_state.feedback:
-    st.write(st.session_state.feedback)
+    try:
+        user_expr = sympify(user_answer.replace("^", "**"))
+        correct_expr = sympify(str(correct_answer).replace("^", "**"))
+
+        if simplify(user_expr - correct_expr) == 0:
+            st.session_state.score += 1
+            st.session_state.feedback = "✅ Korrekt!"
+        else:
+            st.session_state.feedback = f"❌ Forkert. Rigtigt svar: {correct_answer}"
+            st.info(f"Forklaring: {explanation}")
+    except:
+        st.session_state.feedback = "⚠️ Kunne ikke tolke dit svar (prøv fx 2*x eller 2x)"
 
 # ----------------------------
 # NÆSTE OPGAVE
