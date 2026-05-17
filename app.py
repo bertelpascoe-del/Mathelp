@@ -3,8 +3,11 @@
 import streamlit as st
 import random
 import time
-from sympy import symbols, sympify, simplify
+from sympy import symbols, simplify
+from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application
 x = symbols('x')
+transformations = standard_transformations + (implicit_multiplication_application,)
+
 
 
 
@@ -115,12 +118,13 @@ user_answer = st.text_input("Dit svar:")
 # SVAR CHECK
 # ----------------------------
 
-if st.button("Tjek svar"):
+
+f st.button("Tjek svar"):
     st.session_state.total += 1
 
     try:
-        user_expr = sympify(user_answer.replace("^", "**"))
-        correct_expr = sympify(str(correct_answer).replace("^", "**"))
+        user_expr = parse_math(user_answer)
+        correct_expr = parse_math(str(correct_answer))
 
         if simplify(user_expr - correct_expr) == 0:
             st.session_state.score += 1
@@ -128,8 +132,9 @@ if st.button("Tjek svar"):
         else:
             st.session_state.feedback = f"❌ Forkert. Rigtigt svar: {correct_answer}"
             st.info(f"Forklaring: {explanation}")
-    except:
+    except Exception as e:
         st.session_state.feedback = "⚠️ Kunne ikke tolke dit svar (prøv fx 2*x eller 2x)"
+
 
 # ----------------------------
 # NÆSTE OPGAVE
